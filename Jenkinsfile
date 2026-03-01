@@ -1,0 +1,23 @@
+pipeline {
+    agent any
+    tools {
+        maven "M3"
+    }
+    stages {
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
+        stage('Build & Test') {
+            steps {
+                sh 'mvn -B -ntp -Dmaven.test.failure.ignore verify'
+            }
+        }
+        stage('Test Results') {
+            steps {
+                junit '**/target/surefire-reports/TEST-*.xml'
+            }
+        }
+    }
+}
